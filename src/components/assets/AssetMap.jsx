@@ -3,9 +3,8 @@ import { useAssets } from '../../contexts/AssetContext';
 import { MapContainer, TileLayer, Marker, Popup, ZoomControl } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
-import './AssetMap.css';
 
-// Fix icon mặc định của Leaflet (tránh lỗi ảnh)
+// Fix icon
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
   iconRetinaUrl: require('leaflet/dist/images/marker-icon-2x.png'),
@@ -15,11 +14,8 @@ L.Icon.Default.mergeOptions({
 
 const AssetMap = () => {
   const { assets } = useAssets();
-  
-  // Lọc các tài sản có tọa độ
   const hasLocation = assets.filter(a => a.latitude && a.longitude);
 
-  // Hàm xác định màu marker theo trạng thái
   const getMarkerColor = (status) => {
     switch(status) {
       case 'Đang sử dụng': return 'green';
@@ -30,7 +26,6 @@ const AssetMap = () => {
     }
   };
 
-  // Tạo icon động (tùy chỉnh màu)
   const createIcon = (status) => {
     const color = getMarkerColor(status);
     const svg = `
@@ -47,55 +42,40 @@ const AssetMap = () => {
     });
   };
 
-  // Tâm bản đồ (nếu có tài sản, lấy vị trí đầu tiên, còn không dùng tọa độ trung tâm Hà Nội)
   const center = hasLocation.length > 0
     ? [hasLocation[0].latitude, hasLocation[0].longitude]
     : [21.0285, 105.8542];
 
   return (
-    <div className="map-page-container">
-      <div className="map-header">
-        <h1>🗺️ Bản đồ tài sản công</h1>
-        <p>Hiển thị <strong>{hasLocation.length}</strong> tài sản có vị trí trên địa bàn</p>
+    <div className="container" style={{ padding: '20px' }}>
+      <div style={{ marginBottom: '20px' }}>
+        <h1 className="text-2xl font-bold" style={{ color: '#0f172a' }}>🗺️ Bản đồ tài sản công</h1>
+        <p className="text-sm text-gray-500">Hiển thị <strong>{hasLocation.length}</strong> tài sản có vị trí trên địa bàn</p>
       </div>
 
       {hasLocation.length === 0 ? (
-        <div className="map-card">
-          <div className="empty-state">
-            <div className="empty-icon">📍</div>
-            <p className="empty-text">Chưa có tài sản nào được gắn vị trí.</p>
-            <p className="empty-sub">Hãy thêm vĩ độ/kinh độ khi tạo hoặc sửa tài sản.</p>
+        <div className="card">
+          <div className="card-body text-center" style={{ padding: '60px 20px' }}>
+            <div style={{ fontSize: '48px' }}>📍</div>
+            <p className="text-gray" style={{ marginTop: '12px' }}>Chưa có tài sản nào được gắn vị trí.</p>
+            <p className="text-sm text-gray-500">Hãy thêm vĩ độ/kinh độ khi tạo hoặc sửa tài sản.</p>
           </div>
         </div>
       ) : (
-        <div className="map-card">
-          <div className="map-container">
-            <MapContainer
-              center={center}
-              zoom={13}
-              style={{ height: '100%', width: '100%' }}
-              zoomControl={false}
-            >
-              <TileLayer
-                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-              />
+        <div className="card">
+          <div className="map-container" style={{ height: '600px' }}>
+            <MapContainer center={center} zoom={13} style={{ height: '100%', width: '100%' }} zoomControl={false}>
+              <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
               <ZoomControl position="bottomright" />
               {hasLocation.map(asset => (
-                <Marker
-                  key={asset.id}
-                  position={[asset.latitude, asset.longitude]}
-                  icon={createIcon(asset.status)}
-                >
-                  <Popup className="custom-popup">
+                <Marker key={asset.id} position={[asset.latitude, asset.longitude]} icon={createIcon(asset.status)}>
+                  <Popup>
                     <div>
-                      <div className="popup-title">{asset.name}</div>
-                      <div className="popup-location">{asset.location || 'Chưa có địa chỉ'}</div>
-                      <span className={`popup-status status-${getMarkerColor(asset.status)}`}>
-                        {asset.status}
-                      </span>
-                      <br />
-                      <a href={`/assets/${asset.id}`} className="popup-link" target="_blank" rel="noreferrer">
+                      <div style={{ fontWeight: 600, color: '#0c4a6e' }}>{asset.name}</div>
+                      <div style={{ color: '#475569', fontSize: '13px' }}>{asset.location || 'Chưa có địa chỉ'}</div>
+                      <span className={`badge badge-${getMarkerColor(asset.status)}`}>{asset.status}</span>
+                      <br/>
+                      <a href={`/assets/${asset.id}`} className="text-primary-600 hover:underline" style={{ fontSize: '13px', display: 'inline-block', marginTop: '8px' }} target="_blank" rel="noreferrer">
                         Xem chi tiết →
                       </a>
                     </div>

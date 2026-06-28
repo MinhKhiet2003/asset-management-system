@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useAssets } from '../../contexts/AssetContext';
-import './AssetForm.css'; // import CSS vừa tạo
 
 const AssetForm = () => {
   const { id } = useParams();
@@ -65,58 +64,29 @@ const AssetForm = () => {
   };
 
   return (
-    <div className="asset-form-container">
-      <h1 className="asset-form-title">
+    <div className="container" style={{ maxWidth: '800px', margin: '0 auto', padding: '20px' }}>
+      <h1 className="text-2xl font-bold" style={{ marginBottom: '24px' }}>
         {isEdit ? '✏️ Sửa tài sản' : '➕ Thêm mới tài sản'}
       </h1>
 
-      <div className="asset-form-card">
+      <div className="card card-body">
         <form onSubmit={handleSubmit}>
-          <div className="asset-form-row">
-            <div className="asset-form-group">
-              <label className="asset-form-label">Tên tài sản <span className="required">*</span></label>
-              <input
-                type="text"
-                name="name"
-                value={formData.name}
-                onChange={handleChange}
-                className="asset-form-input"
-                required
-                placeholder="Ví dụ: Bàn hội trường"
-              />
+          <div className="grid grid-cols-2" style={{ gap: '1rem' }}>
+            <div className="form-group">
+              <label className="form-label">Tên tài sản <span style={{ color: 'red' }}>*</span></label>
+              <input type="text" name="name" value={formData.name} onChange={handleChange} className="form-control" required placeholder="Ví dụ: Bàn hội trường" />
             </div>
-            <div className="asset-form-group">
-              <label className="asset-form-label">Mã tài sản <span className="required">*</span></label>
-              <input
-                type="text"
-                name="code"
-                value={formData.code}
-                onChange={handleChange}
-                className="asset-form-input"
-                required
-                placeholder="Ví dụ: TS-001"
-              />
+            <div className="form-group">
+              <label className="form-label">Mã tài sản <span style={{ color: 'red' }}>*</span></label>
+              <input type="text" name="code" value={formData.code} onChange={handleChange} className="form-control" required placeholder="Ví dụ: TS-001" />
             </div>
-            <div className="asset-form-group">
-              <label className="asset-form-label">Danh mục <span className="required">*</span></label>
-              <input
-                type="text"
-                name="category"
-                value={formData.category}
-                onChange={handleChange}
-                className="asset-form-input"
-                required
-                placeholder="Nội thất, thiết bị, phương tiện..."
-              />
+            <div className="form-group">
+              <label className="form-label">Danh mục <span style={{ color: 'red' }}>*</span></label>
+              <input type="text" name="category" value={formData.category} onChange={handleChange} className="form-control" required placeholder="Nội thất, thiết bị, phương tiện..." />
             </div>
-            <div className="asset-form-group">
-              <label className="asset-form-label">Tình trạng</label>
-              <select
-                name="status"
-                value={formData.status}
-                onChange={handleChange}
-                className="asset-form-select"
-              >
+            <div className="form-group">
+              <label className="form-label">Tình trạng</label>
+              <select name="status" value={formData.status} onChange={handleChange} className="form-control">
                 <option value="Đang sử dụng">Đang sử dụng</option>
                 <option value="Đang bảo trì">Đang bảo trì</option>
                 <option value="Hỏng">Hỏng</option>
@@ -125,97 +95,45 @@ const AssetForm = () => {
             </div>
           </div>
 
-          <div className="asset-form-group">
-            <label className="asset-form-label">Vị trí</label>
-            <input
-              type="text"
-              name="location"
-              value={formData.location}
-              onChange={handleChange}
-              className="asset-form-input"
-              placeholder="Ví dụ: Hội trường UBND xã"
-            />
+          <div className="form-group">
+            <label className="form-label">Vị trí</label>
+            <input type="text" name="location" value={formData.location} onChange={handleChange} className="form-control" placeholder="Ví dụ: Hội trường UBND xã" />
           </div>
 
-          <div className="asset-form-row">
-            <div className="asset-form-group">
-              <label className="asset-form-label">Vĩ độ (Latitude)</label>
-              <input
-                type="number"
-                step="any"
-                name="latitude"
-                value={formData.latitude}
-                onChange={handleChange}
-                className="asset-form-input"
-                placeholder="Ví dụ: 21.0285"
-              />
+          <div className="grid grid-cols-2" style={{ gap: '1rem' }}>
+            <div className="form-group">
+              <label className="form-label">Vĩ độ (Latitude)</label>
+              <input type="number" step="any" name="latitude" value={formData.latitude} onChange={handleChange} className="form-control" placeholder="Ví dụ: 21.0285" />
             </div>
-            <div className="asset-form-group">
-              <label className="asset-form-label">Kinh độ (Longitude)</label>
-              <input
-                type="number"
-                step="any"
-                name="longitude"
-                value={formData.longitude}
-                onChange={handleChange}
-                className="asset-form-input"
-                placeholder="Ví dụ: 105.8542"
-              />
+            <div className="form-group">
+              <label className="form-label">Kinh độ (Longitude)</label>
+              <input type="number" step="any" name="longitude" value={formData.longitude} onChange={handleChange} className="form-control" placeholder="Ví dụ: 105.8542" />
             </div>
           </div>
 
-          <div className="asset-form-row">
-            <div className="asset-form-group">
-              <label className="asset-form-label">Ngày mua</label>
-              <input
-                type="date"
-                name="purchaseDate"
-                value={formData.purchaseDate}
-                onChange={handleChange}
-                className="asset-form-input"
-              />
+          <div className="grid grid-cols-3" style={{ gap: '1rem' }}>
+            <div className="form-group">
+              <label className="form-label">Ngày mua</label>
+              <input type="date" name="purchaseDate" value={formData.purchaseDate} onChange={handleChange} className="form-control" />
             </div>
-            <div className="asset-form-group">
-              <label className="asset-form-label">Bảo trì gần nhất</label>
-              <input
-                type="date"
-                name="lastMaintenance"
-                value={formData.lastMaintenance}
-                onChange={handleChange}
-                className="asset-form-input"
-              />
+            <div className="form-group">
+              <label className="form-label">Bảo trì gần nhất</label>
+              <input type="date" name="lastMaintenance" value={formData.lastMaintenance} onChange={handleChange} className="form-control" />
             </div>
-            <div className="asset-form-group">
-              <label className="asset-form-label">Bảo trì kế tiếp</label>
-              <input
-                type="date"
-                name="nextMaintenance"
-                value={formData.nextMaintenance}
-                onChange={handleChange}
-                className="asset-form-input"
-              />
+            <div className="form-group">
+              <label className="form-label">Bảo trì kế tiếp</label>
+              <input type="date" name="nextMaintenance" value={formData.nextMaintenance} onChange={handleChange} className="form-control" />
             </div>
           </div>
 
-          <div className="asset-form-group">
-            <label className="asset-form-label">Mô tả</label>
-            <textarea
-              name="description"
-              value={formData.description}
-              onChange={handleChange}
-              className="asset-form-textarea"
-              rows="3"
-              placeholder="Thông tin thêm về tài sản..."
-            ></textarea>
+          <div className="form-group">
+            <label className="form-label">Mô tả</label>
+            <textarea name="description" value={formData.description} onChange={handleChange} rows="3" className="form-control" placeholder="Thông tin thêm về tài sản..."></textarea>
           </div>
 
-          <div className="asset-form-actions">
-            <button type="submit" className="asset-btn asset-btn-primary">
-              {isEdit ? '💾 Cập nhật' : '➕ Thêm mới'}
-            </button>
-            <button type="button" className="asset-btn asset-btn-outline" onClick={() => navigate('/assets')}>
-              Hủy
-            </button>
+          <div className="flex gap-2" style={{ paddingTop: '1rem', borderTop: '1px solid #e2e8f0' }}>
+            <button type="submit" className="btn btn-primary">{isEdit ? '💾 Cập nhật' : '➕ Thêm mới'}</button>
+            <button type="button" className="btn btn-outline" onClick={() => navigate('/assets')}>Hủy</button>
           </div>
         </form>
       </div>

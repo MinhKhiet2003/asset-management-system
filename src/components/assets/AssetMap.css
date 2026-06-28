@@ -28,14 +28,23 @@
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
   border: 1px solid #e2e8f0;
   overflow: hidden;
+  position: relative;
+  z-index: 1; /* Đảm bảo thấp hơn header */
 }
 
 .map-container {
   height: 600px;
   width: 100%;
+  position: relative;
+  z-index: 1;
 }
 
-/* Tùy chỉnh popup */
+/* Leaflet map z-index fix */
+.map-container .leaflet-container {
+  z-index: 1 !important;
+}
+
+/* Popup styling */
 .custom-popup .leaflet-popup-content-wrapper {
   border-radius: 8px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.12);
