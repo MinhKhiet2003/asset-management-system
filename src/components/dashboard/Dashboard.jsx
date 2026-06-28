@@ -7,7 +7,7 @@ const Dashboard = () => {
   const total = assets.length;
   const inUse = assets.filter(a => a.status === 'Đang sử dụng').length;
   const maintenance = assets.filter(a => a.status === 'Đang bảo trì').length;
-  const broken = assets.filter(a => a.status === 'Hỏng').length;
+  // const broken = assets.filter(a => a.status === 'Hỏng').length;
   const needMaintenance = assets.filter(a => a.nextMaintenance && new Date(a.nextMaintenance) < new Date()).length;
 
   const categoryStats = assets.reduce((acc, cur) => {

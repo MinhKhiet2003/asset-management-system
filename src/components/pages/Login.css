@@ -171,6 +171,18 @@
   text-decoration: underline;
 }
 
+.link-button {
+  background: none;
+  border: none;
+  color: #0ea5e9;
+  font-weight: 500;
+  cursor: pointer;
+  text-decoration: underline;
+  font-size: inherit;
+}
+.link-button:hover {
+  color: #0284c7;
+}
 .demo-accounts {
   margin-top: 20px;
   padding: 16px;

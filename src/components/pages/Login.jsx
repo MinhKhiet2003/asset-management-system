@@ -113,16 +113,24 @@ const Login = () => {
           {isLogin ? (
             <span>
               Chưa có tài khoản?{' '}
-              <a href="#" onClick={(e) => { e.preventDefault(); setIsLogin(false); setError(''); }}>
+              <button 
+                type="button"
+                className="link-button"
+                onClick={() => { setIsLogin(false); setError(''); }}
+              >
                 Đăng ký ngay
-              </a>
+              </button>
             </span>
           ) : (
             <span>
               Đã có tài khoản?{' '}
-              <a href="#" onClick={(e) => { e.preventDefault(); setIsLogin(true); setError(''); }}>
+              <button 
+                type="button"
+                className="link-button"
+                onClick={() => { setIsLogin(true); setError(''); }}
+              >
                 Đăng nhập
-              </a>
+              </button>
             </span>
           )}
         </div>

@@ -32,7 +32,8 @@ export const AuthProvider = ({ children }) => {
       setTimeout(() => {
         const found = USERS[username];
         if (found && found.password === password) {
-          const { password, ...userWithoutPassword } = found;
+          // Loại bỏ password trước khi lưu vào state (biến _password không dùng)
+          const { password: _password, ...userWithoutPassword } = found;
           setUser(userWithoutPassword);
           localStorage.setItem('user', JSON.stringify(userWithoutPassword));
           resolve(userWithoutPassword);
@@ -51,7 +52,7 @@ export const AuthProvider = ({ children }) => {
           reject(new Error('Tên đăng nhập đã tồn tại'));
         } else {
           USERS[username] = { username, password, role: 'user', name: name || username };
-          const { password, ...newUser } = USERS[username];
+          const { password: _password, ...newUser } = USERS[username];
           resolve(newUser);
         }
       }, 500);
