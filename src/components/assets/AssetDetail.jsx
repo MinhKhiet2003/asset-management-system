@@ -4,9 +4,7 @@ import { useAssets } from '../../contexts/AssetContext';
 import QRCode from 'react-qr-code';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
-import Card from '../common/Card';
-import Badge from '../common/Badge';
-import Button from '../common/Button';
+import './AssetDetail.css'; // Import CSS riêng
 
 const AssetDetail = () => {
   const { id } = useParams();
@@ -18,15 +16,20 @@ const AssetDetail = () => {
     setAsset(found);
   }, [id, assets]);
 
+  // Hàm tạo URL đầy đủ cho QR code
+  const getAssetUrl = () => {
+    // Lấy domain hiện tại (nếu chạy trên trình duyệt)
+    const baseUrl = window.location.origin; // ví dụ: https://asset-management-system-j5dl.vercel.app
+    return `${baseUrl}/assets/${asset.id}`;
+  };
+
   if (!asset) {
     return (
-      <div className="flex items-center justify-center h-64">
-        <div className="text-center">
-          <div className="text-4xl mb-2">🔍</div>
-          <p className="text-gray-500">Đang tải hoặc không tìm thấy tài sản...</p>
-          <Link to="/assets" className="text-primary-600 hover:underline mt-2 inline-block">
-            ← Quay lại danh sách
-          </Link>
+      <div className="loading">
+        <div>
+          <div className="icon">🔍</div>
+          <p className="text">Đang tải hoặc không tìm thấy tài sản...</p>
+          <Link to="/assets" className="link">← Quay lại danh sách</Link>
         </div>
       </div>
     );
@@ -42,101 +45,93 @@ const AssetDetail = () => {
   const isOverdue = asset.nextMaintenance && new Date(asset.nextMaintenance) < new Date();
 
   return (
-    <div className="space-y-6">
+    <div className="asset-detail-container">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+      <div className="asset-header">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">{asset.name}</h1>
-          <p className="text-sm text-gray-500">Mã: <span className="font-mono">{asset.code}</span></p>
+          <h1 className="asset-title">{asset.name}</h1>
+          <div className="asset-code">Mã: <span>{asset.code}</span></div>
         </div>
-        <Link to="/assets">
-          <Button variant="outline" size="sm">← Quay lại danh sách</Button>
-        </Link>
+        <Link to="/assets" className="btn-back">← Quay lại danh sách</Link>
       </div>
 
-      {/* Cảnh báo quá hạn bảo trì */}
+      {/* Cảnh báo quá hạn */}
       {isOverdue && (
-        <Card className="p-4 border-l-4 border-red-500 bg-red-50">
-          <div className="flex items-start">
-            <span className="text-red-600 text-xl mr-3">⚠️</span>
-            <div>
-              <p className="font-semibold text-red-800">Đã quá hạn bảo trì!</p>
-              <p className="text-sm text-red-600">
-                Ngày bảo trì kế tiếp: <strong>{asset.nextMaintenance}</strong>. Vui lòng thực hiện bảo trì ngay.
-              </p>
+        <div className="alert-warning">
+          <span className="icon">⚠️</span>
+          <div>
+            <div className="title">Đã quá hạn bảo trì!</div>
+            <div className="desc">
+              Ngày bảo trì kế tiếp: <strong>{asset.nextMaintenance}</strong>. Vui lòng thực hiện bảo trì ngay.
             </div>
           </div>
-        </Card>
+        </div>
       )}
 
-      {/* Grid thông tin */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      {/* Grid thông tin + QR */}
+      <div className="asset-grid">
         {/* Thông tin chung */}
-        <Card className="lg:col-span-2 p-5">
-          <h2 className="text-lg font-semibold text-gray-800 mb-4 flex items-center">
-            <span className="mr-2">📋</span> Thông tin chi tiết
-          </h2>
-          <dl className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-3 text-sm">
+        <div className="card">
+          <h2 className="card-title">📋 Thông tin chi tiết</h2>
+          <dl className="info-grid">
             <div>
-              <dt className="text-gray-500">Danh mục</dt>
-              <dd className="font-medium">{asset.category}</dd>
+              <dt>Danh mục</dt>
+              <dd>{asset.category}</dd>
             </div>
             <div>
-              <dt className="text-gray-500">Vị trí</dt>
+              <dt>Vị trí</dt>
               <dd>{asset.location || 'Chưa cập nhật'}</dd>
             </div>
             <div>
-              <dt className="text-gray-500">Tình trạng</dt>
-              <dd><Badge color={statusColor}>{asset.status}</Badge></dd>
+              <dt>Tình trạng</dt>
+              <dd>
+                <span className={`badge badge-${statusColor}`}>{asset.status}</span>
+              </dd>
             </div>
             <div>
-              <dt className="text-gray-500">Ngày mua</dt>
+              <dt>Ngày mua</dt>
               <dd>{asset.purchaseDate || 'Chưa cập nhật'}</dd>
             </div>
             <div>
-              <dt className="text-gray-500">Bảo trì gần nhất</dt>
+              <dt>Bảo trì gần nhất</dt>
               <dd>{asset.lastMaintenance || 'Chưa có'}</dd>
             </div>
             <div>
-              <dt className="text-gray-500">Bảo trì kế tiếp</dt>
-              <dd className={isOverdue ? 'text-red-600 font-semibold' : ''}>
+              <dt>Bảo trì kế tiếp</dt>
+              <dd style={{ color: isOverdue ? '#dc2626' : 'inherit', fontWeight: isOverdue ? 'bold' : 'normal' }}>
                 {asset.nextMaintenance || 'Chưa có kế hoạch'}
               </dd>
             </div>
-            <div className="sm:col-span-2">
-              <dt className="text-gray-500">Mô tả</dt>
+            <div className="full-width">
+              <dt>Mô tả</dt>
               <dd>{asset.description || 'Không có mô tả'}</dd>
             </div>
           </dl>
-        </Card>
+        </div>
 
         {/* QR Code */}
-        <Card className="p-5 flex flex-col items-center justify-center">
-          <h2 className="text-lg font-semibold text-gray-800 mb-3">Mã QR</h2>
-          <div className="bg-white p-3 rounded-lg shadow-inner">
+        <div className="card qr-wrapper">
+          <h2 className="card-title">Mã QR</h2>
+          <div className="qr-box">
             <QRCode
-              value={JSON.stringify({ id: asset.id, code: asset.code, name: asset.name })}
-              size={140}
+              value={getAssetUrl()}  // ← Đường dẫn URL đầy đủ
+              size={150}
               bgColor="#ffffff"
               fgColor="#0c4a6e"
             />
           </div>
-          <p className="text-xs text-gray-500 mt-3 text-center">
-            Quét mã để xem thông tin nhanh<br />
-            <span className="font-mono text-[10px]">{asset.code}</span>
+          <p className="qr-label">
+            Quét mã để xem thông tin<br />
+            <span className="code">{asset.code}</span>
           </p>
-        </Card>
+        </div>
       </div>
 
-      {/* Bản đồ GIS */}
+      {/* Bản đồ */}
       {asset.latitude && asset.longitude && (
-        <Card className="p-0 overflow-hidden">
-          <div className="p-4 border-b border-gray-100">
-            <h2 className="text-lg font-semibold text-gray-800 flex items-center">
-              <span className="mr-2">📍</span> Vị trí trên bản đồ
-            </h2>
-          </div>
-          <div className="h-64 w-full">
+        <div className="card map-wrapper">
+          <h2 className="card-title">📍 Vị trí trên bản đồ</h2>
+          <div className="map-container">
             <MapContainer
               center={[asset.latitude, asset.longitude]}
               zoom={15}
@@ -151,34 +146,30 @@ const AssetDetail = () => {
               </Marker>
             </MapContainer>
           </div>
-        </Card>
+        </div>
       )}
 
-      {/* Lịch sử sử dụng */}
-      <Card className="p-5">
-        <h2 className="text-lg font-semibold text-gray-800 mb-3 flex items-center">
-          <span className="mr-2">📜</span> Lịch sử sử dụng
-        </h2>
+      {/* Lịch sử */}
+      <div className="card">
+        <h2 className="card-title">📜 Lịch sử sử dụng</h2>
         {asset.history && asset.history.length > 0 ? (
-          <ul className="divide-y divide-gray-100">
+          <ul className="history-list">
             {asset.history.map((item, index) => (
-              <li key={index} className="py-2 flex justify-between text-sm">
-                <span className="text-gray-700">{item.event}</span>
-                <span className="text-gray-400">{item.date}</span>
+              <li key={index} className="history-item">
+                <span className="event">{item.event}</span>
+                <span className="date">{item.date}</span>
               </li>
             ))}
           </ul>
         ) : (
-          <p className="text-sm text-gray-400 italic">Chưa có lịch sử</p>
+          <p className="empty-history">Chưa có lịch sử</p>
         )}
-      </Card>
+      </div>
 
       {/* Hành động */}
-      <div className="flex flex-wrap gap-3">
-        <Link to={`/assets/edit/${asset.id}`}>
-          <Button variant="secondary">✏️ Sửa tài sản</Button>
-        </Link>
-        <Button variant="outline" onClick={() => window.print()}>🖨️ In thông tin</Button>
+      <div className="actions">
+        <Link to={`/assets/edit/${asset.id}`} className="btn-edit">✏️ Sửa tài sản</Link>
+        <button className="btn-print" onClick={() => window.print()}>🖨️ In thông tin</button>
       </div>
     </div>
   );

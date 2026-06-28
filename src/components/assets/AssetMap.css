@@ -1,0 +1,100 @@
+/* AssetMap.css */
+.map-page-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.map-header {
+  margin-bottom: 20px;
+}
+
+.map-header h1 {
+  font-size: 28px;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0;
+}
+
+.map-header p {
+  color: #64748b;
+  margin-top: 4px;
+  font-size: 15px;
+}
+
+.map-card {
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+  border: 1px solid #e2e8f0;
+  overflow: hidden;
+}
+
+.map-container {
+  height: 600px;
+  width: 100%;
+}
+
+/* Tùy chỉnh popup */
+.custom-popup .leaflet-popup-content-wrapper {
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+  padding: 4px;
+}
+
+.custom-popup .leaflet-popup-content {
+  font-size: 14px;
+  min-width: 180px;
+  padding: 4px 0;
+}
+
+.popup-title {
+  font-weight: 600;
+  color: #0c4a6e;
+  font-size: 16px;
+}
+
+.popup-location {
+  color: #475569;
+  font-size: 13px;
+}
+
+.popup-status {
+  display: inline-block;
+  margin-top: 6px;
+  padding: 2px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.status-active { background: #dcfce7; color: #166534; }
+.status-maintenance { background: #fef9c3; color: #854d0e; }
+.status-broken { background: #fecaca; color: #991b1b; }
+.status-liquidated { background: #e2e8f0; color: #334155; }
+
+.popup-link {
+  display: inline-block;
+  margin-top: 8px;
+  color: #0284c7;
+  font-size: 13px;
+  text-decoration: underline;
+}
+.popup-link:hover { color: #0369a1; }
+
+/* Empty state */
+.empty-state {
+  padding: 60px 20px;
+  text-align: center;
+}
+.empty-icon { font-size: 48px; }
+.empty-text { color: #64748b; margin-top: 12px; }
+.empty-sub { color: #94a3b8; font-size: 14px; }
+
+/* Responsive */
+@media (max-width: 640px) {
+  .map-container {
+    height: 400px;
+  }
+  .map-header h1 { font-size: 22px; }
+}
